@@ -1,12 +1,11 @@
-/* eslint-disable no-param-reassign */
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-import { axiosInstance } from "@/src/lib/axios/axiosInstance";
-import { routes } from "@/src/lib/axios/routes";
-import type { User } from "@/src/lib/features/users/types";
+import { axiosInstance } from "@src/lib/axios/axiosInstance";
+import { routes } from "@src/lib/axios/routes";
+import type { User } from "@src/lib/features/users/types";
 
-export default NextAuth({
+const handler = NextAuth({
   providers: [
     // reference: https://next-auth.js.org/configuration/providers/credentials#how-to
     CredentialsProvider({
@@ -66,4 +65,6 @@ export default NextAuth({
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
-});
+})
+
+export { handler as GET, handler as POST }
