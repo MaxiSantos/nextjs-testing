@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "db:reset": "source scripts/reset-db.sh",
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "lint": "next lint",
     "build": "next build",
     "build:test": "npm run db:reset && export NODE_ENV=\"test\" && next build",
@@ -44,7 +44,7 @@
     "react-hook-form": "7.53.2",
     "react-icons": "^5.3.0",
     "sharp": "0.33.5",
-    "swr": "2.2.5"
+    "swr": "2.2.4"
   },
   "devDependencies": {
     "@testing-library/cypress": "10.0.2",

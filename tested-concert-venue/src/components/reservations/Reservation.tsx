@@ -1,14 +1,10 @@
+'use client'
 /* eslint-disable @typescript-eslint/no-shadow */
 import {
   Box,
   Button,
   Heading,
   HStack,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
   Stack,
   Text,
   VStack,
@@ -23,6 +19,8 @@ import { routes } from "@/src/lib/axios/routes";
 import { generateRandomId } from "@/src/lib/features/reservations/utils";
 import type { Show } from "@/src/lib/features/shows/types";
 import { formatDate } from "@/src/lib/features/shows/utils";
+import { NumberInputField, NumberInputRoot } from "../ui/number-input";
+import { useRouter } from "next/navigation";
 
 const DEFAULT_TICKET_COUNT = 2;
 const FIFTEEN_SECONDS = 15 * 1000;
@@ -33,20 +31,26 @@ const getShowsViaAPI = async (showId: number) => {
 };
 
 interface ReservationProps {
-  showId: number;
-  submitPurchase: ({
+  showId: number;  
+}
+
+export const Reservation = ({ showId }: ReservationProps) => {
+  const [reservedSeatCount, setReservedSeatCount] =
+    React.useState(DEFAULT_TICKET_COUNT);
+  const router = useRouter();
+  const reservationId = generateRandomId();
+  const submitPurchase = ({
     reservationId,
     reservedSeatCount,
   }: {
     reservationId: number;
     reservedSeatCount: number;
-  }) => void;
-}
+  }) => {
+    router.push(
+      `/confirmation/${reservationId}?seatCount=${reservedSeatCount}&showId=${showId}`
+    );
+  };
 
-export const Reservation = ({ showId, submitPurchase }: ReservationProps) => {
-  const [reservedSeatCount, setReservedSeatCount] =
-    React.useState(DEFAULT_TICKET_COUNT);
-  const reservationId = generateRandomId();
   const onSubmit = () => submitPurchase({ reservationId, reservedSeatCount });
 
   const {
@@ -87,22 +91,15 @@ export const Reservation = ({ showId, submitPurchase }: ReservationProps) => {
                 {show.availableSeatCount} seats left
               </Heading>
               <HStack pt={10} pb={3}>
-                <NumberInput
-                  value={reservedSeatCount}
-                  onChange={(value) => setReservedSeatCount(Number(value))}
+                <NumberInputRoot
+                  maxWidth="80px"
                   min={1}
                   max={Math.min(8, show.availableSeatCount)}
-                  precision={0}
-                  color="gray.100"
-                  maxWidth="80px"
-                  name="availableSeatCount"
+                  value={reservedSeatCount}
+                  onValueChange={(e) => setReservedSeatCount(e.value)}
                 >
                   <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
+                </NumberInputRoot>               
                 <Heading size="md">Tickets</Heading>
               </HStack>
               <Box textAlign="center">

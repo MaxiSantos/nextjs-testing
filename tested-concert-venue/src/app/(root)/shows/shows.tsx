@@ -1,13 +1,13 @@
+'use client'
+
 import {
   Box,
   Button,
   Heading,
   List,
-  ListItem,
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import React from "react";
 import useSWR from "swr";
 
@@ -15,9 +15,10 @@ import { LoadingSpinner } from "@components/_common/LoadingSpinner";
 import { BandLinkHeading } from "@components/bands/BandLinkHeading";
 import { axiosInstance } from "@src/lib/axios/axiosInstance";
 import { routes } from "@src/lib/axios/routes";
-import { getShows as getShowsViaDbQuery } from "@src/lib/features/shows/queries";
+
 import type { Show } from "@src/lib/features/shows/types";
 import { formatDate } from "@src/lib/features/shows/utils";
+import Link from "next/link";
 
 const THIRTY_SECONDS = 30 * 1000;
 
@@ -26,29 +27,12 @@ const getShowsViaAPI = async () => {
   return data.shows;
 };
 
-// ISR reference
-// https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration
-
-// SWR + ISR reference:
-// https://www.smashingmagazine.com/2021/09/useswr-react-hook-library-incremental-static-regeneration-nextjs/
-
-export async function getStaticProps() {
-  // can't use getShows here because getStaticProps runs while building;
-  // Server isn't running while building!
-  const isrShows = await getShowsViaDbQuery();
-
-  return {
-    props: { isrShows },
-  };
-}
-
-export default function Shows({
+export default function ShowsList({
   isrShows,
 }: {
   isrShows: Array<Show>;
 }): React.ReactElement {
-  const router = useRouter();
-
+  
   const { data: shows, isValidating } = useSWR<Array<Show>>(
     "/api/shows",
     getShowsViaAPI,
@@ -62,9 +46,9 @@ export default function Shows({
     <Stack align="center" spacing={10}>
       <LoadingSpinner display={isValidating && !shows} />
       <Heading mt={10}>Upcoming Shows</Heading>
-      <List width="100%" alignContent="center" pb={10}>
+      <List.Root width="100%" alignContent="center" pb={10}>
         {shows?.map((show) => (
-          <ListItem
+          <List.Item
             key={show.id}
             width="100%"
             display="flex"
@@ -80,9 +64,9 @@ export default function Shows({
                   sold out
                 </Heading>
               ) : (
-                <Button onClick={() => router.push(`/reservations/${show.id}`)}>
+                <Link href={`/reservations/${show.id}`}>
                   tickets
-                </Button>
+                </Link>                
               )}
             </Box>
             <Box>
@@ -91,9 +75,9 @@ export default function Shows({
                 {show.band.description}
               </Text>
             </Box>
-          </ListItem>
+          </List.Item>
         ))}
-      </List>
+      </List.Root>
     </Stack>
   );
 }
