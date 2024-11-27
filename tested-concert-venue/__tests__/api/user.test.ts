@@ -1,8 +1,8 @@
 import { testApiHandler } from "next-test-api-route-handler";
 
-import { validateToken } from "@/lib/auth/utils";
-import userReservationsHandler from "@/pages/api/users/[userId]/reservations";
-import userAuthHandler from "@/pages/api/users/index";
+import { validateToken } from "@/src/lib/auth/utils";
+import userReservationsHandler from "@/src/app/api/users/[userId]/reservations";
+import userAuthHandler from "@/src/app/api/users/index";
 
 jest.mock("@/lib/auth/utils");
 const mockValidateToken = validateToken as jest.Mock;

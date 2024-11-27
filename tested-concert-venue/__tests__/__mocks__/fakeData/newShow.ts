@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-import { ShowWithoutAvailableSeatCount } from "@/lib/features/shows/types";
+import { ShowWithoutAvailableSeatCount } from "@/src/lib/features/shows/types";
 
 import { generateNewBand } from "./newBand";
 

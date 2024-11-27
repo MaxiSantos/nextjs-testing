@@ -1,10 +1,10 @@
 import path from "path";
 
-import { filenames, getJSONfromFile } from "@/lib/db/db-utils";
-import type { Band } from "@/lib/features/bands/types";
-import type { Reservation } from "@/lib/features/reservations/types";
-import type { Show } from "@/lib/features/shows/types";
-import type { AuthUser } from "@/lib/features/users/types";
+import { filenames, getJSONfromFile } from "@/src/lib/db/db-utils";
+import type { Band } from "@/src/lib/features/bands/types";
+import type { Reservation } from "@/src/lib/features/reservations/types";
+import type { Show } from "@/src/lib/features/shows/types";
+import type { AuthUser } from "@/src/lib/features/users/types";
 
 // store fake data in JSON files for easier command-line db reset
 const JSON_FILEPATH = path.join(__dirname, "json");

@@ -1,4 +1,4 @@
-import { Band } from "@/lib/features/bands/types";
+import { Band } from "@/src/lib/features/bands/types";
 
 export const generateNewBand = (bandId: number): Band => ({
   id: bandId,

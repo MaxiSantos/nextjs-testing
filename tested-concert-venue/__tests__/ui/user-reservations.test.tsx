@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 
-import { UserReservations } from "@/components/user/UserReservations";
+import { UserReservations } from "@/src/components/user/UserReservations";
 
 test("Displays reservations and 'purchase more' button when reservations exist", async () => {
   render(<UserReservations userId={1} />);

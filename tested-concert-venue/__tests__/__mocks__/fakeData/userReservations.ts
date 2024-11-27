@@ -1,4 +1,4 @@
-import { ReservationWithShow } from "@/lib/features/reservations/types";
+import { ReservationWithShow } from "@/src/lib/features/reservations/types";
 
 export const fakeUserReservations: Array<ReservationWithShow> = [
   {

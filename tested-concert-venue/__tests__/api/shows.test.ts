@@ -2,8 +2,8 @@
 import { testApiHandler } from "next-test-api-route-handler";
 
 import { readFakeData } from "@/__tests__/__mocks__/fakeData";
-import showIdHandler from "@/pages/api/shows/[showId]";
-import showsHandler from "@/pages/api/shows/index";
+import showIdHandler from "@/src/app/api/shows/[showId]";
+import showsHandler from "@/src/app/api/shows/index";
 
 test("GET /api/shows returns shows from database", async () => {
   await testApiHandler({

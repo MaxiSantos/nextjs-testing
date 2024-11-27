@@ -1,4 +1,4 @@
-import { Reservation } from "@/lib/features/reservations/types";
+import { Reservation } from "@/src/lib/features/reservations/types";
 
 export const generateNewReservation = ({
   reservationId,

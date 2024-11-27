@@ -18,5 +18,9 @@
   "files.eol": "\n",
   "files.associations": {
     ".env*": "env"
+  },
+  "workbench.colorCustomizations": {
+    "editor.selectionBackground": "#135564",
+    "editor.selectionHighlightBackground": "#135564"
   }
 }

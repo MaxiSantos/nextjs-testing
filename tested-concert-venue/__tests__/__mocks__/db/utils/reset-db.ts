@@ -1,5 +1,5 @@
 import { readFakeData } from "@/__tests__/__mocks__/fakeData";
-import { filenames, writeJSONToFile } from "@/lib/db/db-utils";
+import { filenames, writeJSONToFile } from "@/src/lib/db/db-utils";
 
 export const resetDB = async () => {
   // failsafe against resetting production db!
