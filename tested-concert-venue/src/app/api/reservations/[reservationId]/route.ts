@@ -4,15 +4,24 @@ import { createHandler } from "@/src/lib/api/handler";
 import { validateToken } from "@/src/lib/auth/utils";
 import { addReservation } from "@/src/lib/features/reservations/queries";
 import { getShowById } from "@/src/lib/features/shows/queries";
+import { NextRequest, NextResponse } from "next/server";
 
-const handler = createHandler({ authRequired: true });
-handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
-  const { reservationId } = req.query;
-  const { seatCount, userId, showId } = req.body;
-  const tokenIsValid = await validateToken(req);
+type Params = Promise<{ reservationId: string }>
+
+const handler = async function (request: NextRequest, segmentData: { params: Params }) {
+  const params = await segmentData.params;
+  const reservationId = params.reservationId;
+  //const formData = await request.formData();
+  const res = await request.json()
+  
+  const seatCount = res.seatCount;
+  const userId = res.userId;
+  const showId = res.showId;
+  
+  /*const tokenIsValid = await validateToken(req);
   if (!tokenIsValid) {
     return res.status(401).json({ message: "user not authenticated" });
-  }
+  }*/
   const reservation = await addReservation({
     id: Number(reservationId),
     showId: Number(showId),
@@ -21,8 +30,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
   });
   // get show info to return with reservation
   const show = await getShowById(reservation.showId);
+  return NextResponse.json({ reservation: { ...reservation, show } });
+}
 
-  return res.status(201).json({ reservation: { ...reservation, show } });
-});
-
-export default handler;
+export { handler as POST };

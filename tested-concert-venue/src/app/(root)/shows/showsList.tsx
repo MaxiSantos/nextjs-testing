@@ -19,6 +19,7 @@ import { routes } from "@src/lib/axios/routes";
 import type { Show } from "@src/lib/features/shows/types";
 import { formatDate } from "@src/lib/features/shows/utils";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const THIRTY_SECONDS = 30 * 1000;
 
@@ -32,7 +33,7 @@ export default function ShowsList({
 }: {
   isrShows: Array<Show>;
 }): React.ReactElement {
-  
+  const router = useRouter();
   const { data: shows, isValidating } = useSWR<Array<Show>>(
     "/api/shows",
     getShowsViaAPI,
@@ -64,9 +65,9 @@ export default function ShowsList({
                   sold out
                 </Heading>
               ) : (
-                <Link href={`/reservations/${show.id}`}>
+                <Button onClick={() => router.push(`/reservations/${show.id}`)}>
                   tickets
-                </Link>                
+                </Button>                            
               )}
             </Box>
             <Box>

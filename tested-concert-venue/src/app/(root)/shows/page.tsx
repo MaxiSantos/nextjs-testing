@@ -18,7 +18,7 @@ import { getShows as getShowsViaDbQuery } from "@src/lib/features/shows/queries"
 import type { Show } from "@src/lib/features/shows/types";
 import { formatDate } from "@src/lib/features/shows/utils";
 import Link from "next/link";
-import ShowsList from "./shows";
+import ShowsList from "./showsList";
 
 const THIRTY_SECONDS = 30 * 1000;
 

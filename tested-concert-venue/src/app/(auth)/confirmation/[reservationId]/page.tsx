@@ -1,7 +1,9 @@
+'use client'
+
 import { Box, Button, Heading, HStack, Stack, Text } from "@chakra-ui/react";
 import { type AxiosResponse } from "axios";
 import Link from "next/link";
-import { useRouter } from "next/router";
+
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
@@ -10,12 +12,20 @@ import { QueryError } from "@components/_common/QueryError";
 import { axiosInstance } from "@/src/lib/axios/axiosInstance";
 import { routes } from "@/src/lib/axios/routes";
 import type { ReservationWithShow } from "@/src/lib/features/reservations/types";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 // data strategy: Client-Side Rendering
 // https://nextjs.org/docs/basic-features/data-fetching/client-side
 
 export default function Confirmation() {
-  const router = useRouter();
+  const searchParams = useSearchParams()
+  const params = useParams<{ reservationId: string }>()
+  const seatCount = searchParams.get('seatCount')
+  const showId = searchParams.get('showId')
+  const reservationId = params.reservationId; 
+  console.log({reservationId})
+  console.log({showId})
+  console.log({seatCount})
 
   const [reservation, setReservation] = useState<
     ReservationWithShow | undefined
@@ -25,25 +35,23 @@ export default function Confirmation() {
   const userId = session?.user?.id;
 
   useEffect(() => {
-    if (router.isReady) {
-      // both route parameters and query string are in `query` object
-      const { reservationId, showId, seatCount } = router.query;
-      axiosInstance
-        .post<null, AxiosResponse<{ reservation: ReservationWithShow }>>(
-          `/api/${routes.reservations}/${reservationId}`,
-          {
-            showId,
-            userId,
-            seatCount,
-          }
-        )
-        .then((data) => setReservation(data.data.reservation))
-        .catch((e) => {
-          setError(e);
-        });
-    }
+    // both route parameters and query string are in `query` object    
+    axiosInstance
+      .post<null, AxiosResponse<{ reservation: ReservationWithShow }>>(
+        `/api/${routes.reservations}/${reservationId}`,
+        {
+          showId,
+          userId,
+          seatCount,
+        }
+      )
+      .then((data) => setReservation(data.data.reservation))
+      .catch((e) => {
+        setError(e);
+      });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.isReady]);
+  }, []);
 
   if (error)
     return <QueryError message={`Could not confirm reservation: ${error}`} />;
