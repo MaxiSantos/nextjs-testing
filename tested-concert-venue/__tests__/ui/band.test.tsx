@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 
 import { readFakeData } from "@/__tests__/__mocks__/fakeData";
-import BandComponent from "@/pages/bands/[bandId]";
+import BandComponent from "src/app/(root)/bands/[bandId]/bandPage";
 
 test("band component displays correct band information", async () => {
   const { fakeBands } = await readFakeData();

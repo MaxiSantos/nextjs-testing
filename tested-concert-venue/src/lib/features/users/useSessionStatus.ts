@@ -8,6 +8,7 @@ interface SessionStatuses {
 
 export const useSessionStatus = (): SessionStatuses => {
   const { status } = useSession();
+  console.log("from useSessionStatus", {status})
   return {
     isLoading: status === "loading",
     isLoggedIn: status === "authenticated",

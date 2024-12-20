@@ -1,14 +1,11 @@
+'use client'
 import {
   Button,
   Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   Heading,
   Input,
   Stack,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -16,6 +13,8 @@ import { useForm } from "react-hook-form";
 import { LoadingSpinner } from "@components/_common/LoadingSpinner";
 import { SignInError } from "@components/auth/SignInError";
 import { useSessionStatus } from "@src/lib/features/users/useSessionStatus";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Field } from "@/src/components/ui/field";
 
 interface FormField {
   display: string;
@@ -29,8 +28,9 @@ export interface SignInDetails {
 
 export default function SignIn() {
   const router = useRouter();
+  const searchParams = useSearchParams()
   const [authError, setAuthError] = useState<string | null>(null);
-  const { callbackUrl } = router.query;
+  const callbackUrl = searchParams.get('seatCount')
   const {
     register,
     handleSubmit,
@@ -49,7 +49,8 @@ export default function SignIn() {
     { name: "password", display: "Password", default: "test" },
   ];
 
-  const handleSignIn = handleSubmit((data) =>
+  const handleSignIn = handleSubmit((data) => {
+    console.log({ data })
     signIn("credentials", {
       ...data,
       redirect: false,
@@ -59,7 +60,7 @@ export default function SignIn() {
         if (error) setAuthError(error);
       }
     )
-  );
+  });
 
   return (
     <Flex minH="84vh" align="center" justify="center">
@@ -78,23 +79,20 @@ export default function SignIn() {
         >
           <form data-testid="sign-in-form">
             {formFields.map((field) => (
-              <FormControl key={field.name} id={field.name} isRequired>
-                <FormLabel>{field.display}</FormLabel>
+              <Field
+                key={field.name}
+                label={field.display}
+                required
+                {...(!!errors[field.name] ? { errorText: `${field.display} is required` } : {})}
+              >
                 <Input
-                  borderColor="gray.700"
                   type={field.name}
                   defaultValue={field.default}
-                  mb={4}
                   {...register(field.name, {
                     required: true,
                   })}
                 />
-                {errors[field.name] && (
-                  <FormErrorMessage>
-                    {field.display} is required
-                  </FormErrorMessage>
-                )}
-              </FormControl>
+              </Field>
             ))}
             <Flex
               mt={4}

@@ -19,7 +19,10 @@ export function NavBar(): React.ReactElement {
   const links = [
     { display: "Shows", route: routes.shows },
     { display: "Bands", route: routes.bands },
-    { display: isLoggedIn ? userName : "Sign In", route: routes.user },
+    ...(!!isLoggedIn ? 
+      [{ display: userName, route: routes.user }] : 
+      [{ display: "Sign In", route: "signin" }]
+    ),
   ];
   return (
     <Box bg="rgba(60, 60, 60, 0.6)" px={4} style={{ fontFamily: "Unica One" }}>

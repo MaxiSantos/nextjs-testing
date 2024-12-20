@@ -1,3 +1,4 @@
+'use client'
 import { Button, Heading, List } from "@chakra-ui/react";
 import Link from "next/link";
 import useSWR from "swr";
@@ -22,23 +23,27 @@ const getUserReservations = async (
   return data.data.userReservations;
 };
 
-export const UserReservations = ({ userId }: { userId: number }) => {
-  const {
+export const UserReservations = async ({ userId }: { userId: number }) => {
+  console.log("trace log");
+  console.log("other thing")
+  /*const {
     data: userReservations,
     error,
     isValidating,
   } = useSWR(`user/${userId}/reservations`, () => getUserReservations(userId), {
     fallbackData: [],
-  });
+  });*/
 
-  if (error)
+  //const userReservations = await getUserReservations(userId)
+
+  /*if (error)
     return (
       <QueryError
         message={`could not retrieve reservations: ${error?.message}`}
       />
     );
 
-  if (isValidating) return <LoadingSpinner display />;
+  if (isValidating) return <LoadingSpinner display />;*/
 
   if (!userReservations || userReservations.length === 0)
     return (

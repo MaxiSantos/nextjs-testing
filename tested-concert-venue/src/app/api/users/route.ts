@@ -1,18 +1,15 @@
 // import { AuthUser, createJWT, hashPassword, passwordIsValid } from "../auth";
 // import { AuthRequest } from "../middlewares";
-import type { NextApiRequest, NextApiResponse } from "next";
-
-import { createHandler } from "@/src/lib/api/handler";
 import { getUsers } from "@/src/lib/features/users/queries";
 import type { AuthUser } from "@/src/lib/features/users/types";
 import {
   passwordIsValid,
   removePasswordandAddToken,
 } from "@/src/lib/features/users/utils";
+import { NextRequest, NextResponse } from "next/server";
 
-const handler = createHandler();
-handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
-  const { email, password } = req.body;
+export async function POST(request: NextRequest) {
+  const { email, password } = await request.json();
 
   // auth user
   const users = await getUsers();
@@ -24,12 +21,9 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
     null
   );
 
-  if (!validUser) return res.status(400).json({ message: "Invalid login" });
+  if (!validUser) return NextResponse.json({ message: "Invalid login" }, { status: 400 })
 
   // create jwt
   const user = removePasswordandAddToken(validUser);
-
-  return res.status(200).json({ user });
-});
-
-export default handler;
+  return NextResponse.json({ user });
+}

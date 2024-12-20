@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { createHandler } from "@/src/lib/api/handler";
 import { validateToken } from "@/src/lib/auth/utils";
 import { addReservation } from "@/src/lib/features/reservations/queries";
 import { getShowById } from "@/src/lib/features/shows/queries";

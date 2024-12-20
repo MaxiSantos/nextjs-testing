@@ -1,3 +1,4 @@
+'use client'
 import { Box, Heading } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 
@@ -10,12 +11,18 @@ import { UserReservations } from "@/src/components/user/UserReservations";
 //    plus SSR is slow
 
 export default function UserProfile() {
-  const { data: session } = useSession();
-
+  
+  const { data: session, status } = useSession()
+  console.log({session})
   const userId = session?.user?.id;
 
-  if (!session || !userId) return null;
-
+  if(status === "loading"){
+    return <p>loading</p>
+  }
+  if(status === "unauthenticated"){
+    return null
+  }
+ 
   return (
     <Box textAlign="center" m={5}>
       <Heading>Welcome {session?.user?.email}</Heading>

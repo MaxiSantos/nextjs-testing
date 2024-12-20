@@ -1,10 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-
-import { createHandler } from "@/src/lib/api/handler";
+import { revalidatePath } from "next/cache";
+import { NextRequest, NextResponse } from "next/server";
 import { addBand } from "@/src/lib/features/bands/queries";
 
-const handler = createHandler();
-handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
+export async function POST(request: NextRequest) {
   // an endpoint to demonstrate on-demand ISR revalidation
   //   https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration#using-on-demand-revalidation
   // in an actual app, this would have a UI, and it would need authorization
@@ -12,19 +10,20 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
   // in this app, this endpoint will be hit by testing directly to test on-demand ISR revalidation
 
   // Check for secret to confirm this is a valid request
-  if (req.query.secret !== process.env.REVALIDATION_SECRET) {
-    return res.status(401).json({ message: "Invalid revalidation token" });
+  const searchParams = request.nextUrl.searchParams
+  const secret = searchParams.get('secret')
+  if (secret !== process.env.REVALIDATION_SECRET) {
+    return NextResponse.json({ message: "Invalid revalidation token" }, { status: 500 })
   }
 
   // add band (here is where authorization would be validated)
-  const { newBand } = req.body;
-  const addedBand = await addBand(newBand);
+  //const { newBand } = req.body;
+  const res = await request.json()
+  const addedBand = await addBand(res.newBand);
 
   // revalidate bands page for ISR
   // note: this will change to `res.revalidate` when
   // this feature is out of beta
-  await res.unstable_revalidate("/bands");
-  return res.json({ band: addedBand, revalidated: true });
-});
-
-export default handler;
+  await revalidatePath("/bands");
+  return NextResponse.json({ band: addedBand, revalidated: true });
+}

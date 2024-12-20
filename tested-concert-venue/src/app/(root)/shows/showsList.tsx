@@ -10,18 +10,22 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import useSWR from "swr";
+import { useRouter } from "next/navigation";
 
 import { LoadingSpinner } from "@components/_common/LoadingSpinner";
 import { BandLinkHeading } from "@components/bands/BandLinkHeading";
 import { axiosInstance } from "@src/lib/axios/axiosInstance";
 import { routes } from "@src/lib/axios/routes";
-
 import type { Show } from "@src/lib/features/shows/types";
 import { formatDate } from "@src/lib/features/shows/utils";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 const THIRTY_SECONDS = 30 * 1000;
+
+// ISR reference
+// https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration
+
+// SWR + ISR reference:
+// https://www.smashingmagazine.com/2021/09/useswr-react-hook-library-incremental-static-regeneration-nextjs/
 
 const getShowsViaAPI = async () => {
   const { data } = await axiosInstance.get(`/api/${routes.shows}`);

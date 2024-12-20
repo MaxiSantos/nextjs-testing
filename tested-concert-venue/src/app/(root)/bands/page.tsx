@@ -1,9 +1,8 @@
-import { Box, Heading, List, ListItem, Stack, Text } from "@chakra-ui/react";
+import { Box, Heading, List, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 
 import { BandLinkHeading } from "@/src/components/bands/BandLinkHeading";
 import { getBands } from "@/src/lib/features/bands/queries";
-import type { Band } from "@/src/lib/features/bands/types";
 
 const removeLeadingThe = (bandName: string) => bandName.replace(/^the /i, "");
 
@@ -15,10 +14,6 @@ export async function _getBands() {
   isrBands.sort((a, b) =>
     removeLeadingThe(a.name) > removeLeadingThe(b.name) ? 0 : -1
   );
-  /*isrBands.forEach(obj => {
-    delete obj.image;
-  });*/
-
   return JSON.stringify(isrBands)
 }
 
